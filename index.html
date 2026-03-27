@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>João Madeira — Engenheiro Civil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --paper: #f0ece3;
+    --steel: #2a3540;
+    --rust: #b84c1a;
+    --mist: #8fa3b1;
+    --lime: #c8d84a;
+    --white: #fafaf7;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    background: rgba(240,236,227,0.88);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    color: var(--steel);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; }
+
+  .lang-toggle {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid rgba(0,0,0,0.2);
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink);
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .lang-btn.active, .lang-btn:hover {
+    background: var(--steel);
+    color: var(--white);
+    border-color: var(--steel);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 6rem 3rem 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 9vw, 8.5rem);
+    line-height: 0.9;
+    color: var(--steel);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.35s forwards;
+  }
+
+  .hero-name em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .hero-desc {
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--ink);
+    opacity: 0;
+    max-width: 420px;
+    animation: fadeUp 0.7s 0.5s forwards;
+    border-left: 2px solid var(--rust);
+    padding-left: 1.2rem;
+  }
+
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.65s forwards;
+  }
+
+  .btn-primary {
+    background: var(--steel);
+    color: var(--white);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    border: 2px solid var(--steel);
+  }
+
+  .btn-primary:hover { background: var(--rust); border-color: var(--rust); }
+
+  .btn-secondary {
+    border: 2px solid var(--steel);
+    color: var(--steel);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { background: var(--steel); color: var(--white); }
+
+  .hero-stats {
+    margin-top: 4rem;
+    display: flex;
+    gap: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .stat-item { display: flex; flex-direction: column; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--steel);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.5; margin-top: 0.3rem; }
+
+  .hero-right {
+    background: var(--steel);
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(6% 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.02) 40px,
+      rgba(255,255,255,0.02) 41px
+    );
+  }
+
+  .hero-img-grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    opacity: 0;
+    animation: fadeIn 1s 0.9s forwards;
+  }
+
+  .hero-img-grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.4) contrast(1.1);
+    mix-blend-mode: luminosity;
+    opacity: 0.5;
+    transition: opacity 0.3s, filter 0.3s;
+  }
+
+  .hero-img-grid img:hover {
+    opacity: 0.9;
+    filter: saturate(0.7) contrast(1.1);
+  }
+
+  .hero-img-grid img:first-child { grid-column: 1 / -1; }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    width: 110px;
+    height: 110px;
+    background: var(--lime);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--steel);
+    line-height: 1.3;
+    animation: spin 20s linear infinite;
+    z-index: 5;
+    padding: 1rem;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SECTIONS */
+  section { padding: 6rem 3rem; }
+
+  .section-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.12);
+  }
+
+  /* ABOUT */
+  .about { background: var(--white); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height: 0.95;
+    color: var(--steel);
+    margin-bottom: 2rem;
+  }
+
+  .about-text {
+    font-size: 0.78rem;
+    line-height: 1.9;
+    opacity: 0.75;
+    margin-bottom: 1.5rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .skill-cell {
+    background: var(--white);
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: background 0.2s;
+  }
+
+  .skill-cell:hover { background: var(--steel); color: var(--white); }
+
+  .skill-name {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+
+  .skill-type {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .langs {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .lang-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .lang-name { font-size: 0.75rem; letter-spacing: 0.06em; }
+  .lang-level { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rust); }
+
+  /* PROJECTS */
+  .projects { background: var(--paper); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .project-card {
+    background: var(--paper);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    cursor: pointer;
+    transition: background 0.3s;
+    group: true;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--steel);
+    transition: height 0.4s cubic-bezier(0.16,1,0.3,1);
+    z-index: 0;
+  }
+
+  .project-card:hover::before { height: 100%; }
+
+  .project-card > * { position: relative; z-index: 1; }
+
+  .project-card:hover .project-num,
+  .project-card:hover .project-title,
+  .project-card:hover .project-desc,
+  .project-card:hover .project-tags span { color: var(--white); border-color: rgba(255,255,255,0.3); }
+
+  .project-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: rgba(0,0,0,0.06);
+    line-height: 1;
+    margin-bottom: auto;
+    transition: color 0.3s;
+  }
+
+  .project-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--steel);
+    margin-bottom: 0.8rem;
+    transition: color 0.3s;
+  }
+
+  .project-desc {
+    font-size: 0.68rem;
+    line-height: 1.7;
+    opacity: 0.65;
+    margin-bottom: 1.2rem;
+    transition: color 0.3s, opacity 0.3s;
+  }
+
+  .project-card:hover .project-desc { opacity: 0.8; }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .project-tags span {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(0,0,0,0.2);
+    padding: 0.25rem 0.6rem;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .project-card.featured {
+    grid-column: span 2;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-end;
+  }
+
+  .project-card.featured .project-info { flex: 1; }
+  .project-card.featured .project-visual {
+    width: 180px;
+    flex-shrink: 0;
+    align-self: stretch;
+    background: var(--mist);
+    opacity: 0.4;
+    position: relative;
+    overflow: hidden;
+    transition: opacity 0.3s;
+  }
+
+  .project-card.featured:hover .project-visual { opacity: 0.2; }
+  .project-card.featured .project-visual img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: saturate(0);
+  }
+
+  /* SERVICES */
+  .services { background: var(--steel); color: var(--white); }
+
+  .services .section-label { color: var(--lime); }
+  .services .section-label::after { background: rgba(255,255,255,0.1); }
+
+  .services-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .service-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: padding 0.2s;
+  }
+
+  .service-item:hover { padding-left: 1rem; }
+
+  .service-left { display: flex; align-items: center; gap: 2rem; }
+
+  .service-idx {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--rust);
+    min-width: 2rem;
+  }
+
+  .service-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+  }
+
+  .service-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .service-tags span {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.2rem 0.5rem;
+    color: var(--mist);
+  }
+
+  .service-arrow {
+    font-size: 1.2rem;
+    opacity: 0.3;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .service-item:hover .service-arrow { opacity: 1; transform: translateX(4px); }
+
+  /* CONTACT */
+  .contact { background: var(--paper); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .contact-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height: 0.95;
+    color: var(--steel);
+  }
+
+  .contact-sub {
+    font-size: 0.75rem;
+    line-height: 1.8;
+    opacity: 0.6;
+    margin-top: 1.5rem;
+    max-width: 360px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .contact-link {
+    background: var(--paper);
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .contact-link:hover { background: var(--steel); color: var(--white); }
+
+  .contact-link-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .contact-link-value { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 1rem; }
+  .contact-link-arrow { opacity: 0.3; transition: opacity 0.2s; }
+  .contact-link:hover .contact-link-arrow { opacity: 1; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.3);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  footer strong { color: var(--white); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; flex-direction: column; }
+    .project-card.featured .project-visual { width: 100%; height: 200px; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .hero-left { padding: 5rem 1.5rem 3rem; }
+  }
+
+  /* LANG CONTENT */
+  [data-lang] { display: none; }
+  .lang-pt [data-lang="pt"] { display: block; }
+  .lang-en [data-lang="en"] { display: block; }
+  .lang-es [data-lang="es"] { display: block; }
+
+  span[data-lang] { display: none; }
+  .lang-pt span[data-lang="pt"],
+  .lang-en span[data-lang="en"],
+  .lang-es span[data-lang="es"] { display: inline; }
+</style>
+</head>
+<body class="lang-pt">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">JM°</a>
+  <ul class="nav-links">
+    <li><a href="#about"><span data-lang="pt">Sobre</span><span data-lang="en">About</span><span data-lang="es">Sobre</span></a></li>
+    <li><a href="#projects"><span data-lang="pt">Projetos</span><span data-lang="en">Projects</span><span data-lang="es">Proyectos</span></a></li>
+    <li><a href="#services"><span data-lang="pt">Serviços</span><span data-lang="en">Services</span><span data-lang="es">Servicios</span></a></li>
+    <li><a href="#contact"><span data-lang="pt">Contato</span><span data-lang="en">Contact</span><span data-lang="es">Contacto</span></a></li>
+  </ul>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <p class="hero-tag">
+      <span data-lang="pt">Engenheiro Civil · Técnico Eletromecânico · Itajaí — SC</span>
+      <span data-lang="en">Civil Engineer · Electromechanical Technician · Itajaí — SC</span>
+      <span data-lang="es">Ingeniero Civil · Técnico Electromecánico · Itajaí — SC</span>
+    </p>
+    <h1 class="hero-name">João <em>Madeira</em></h1>
+    <p class="hero-desc">
+      <span data-lang="pt">Projetos de biodigestores, sistemas de biogás, plantas de tratamento de água e infraestrutura industrial — da concepção ao detalhamento técnico.</span>
+      <span data-lang="en">Biodigester design, biogas systems, water treatment plants and industrial infrastructure — from concept to technical detailing.</span>
+      <span data-lang="es">Diseño de biodigestores, sistemas de biogás, plantas de tratamiento de agua e infraestructura industrial — desde la concepción hasta el detalle técnico.</span>
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">
+        <span data-lang="pt">Ver Projetos</span>
+        <span data-lang="en">View Projects</span>
+        <span data-lang="es">Ver Proyectos</span>
+      </a>
+      <a href="#contact" class="btn-secondary">
+        <span data-lang="pt">Contato</span>
+        <span data-lang="en">Contact</span>
+        <span data-lang="es">Contacto</span>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">24</span>
+        <span class="stat-label"><span data-lang="pt">anos</span><span data-lang="en">years old</span><span data-lang="es">años</span></span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">3</span>
+        <span class="stat-label"><span data-lang="pt">idiomas</span><span data-lang="en">languages</span><span data-lang="es">idiomas</span></span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">5+</span>
+        <span class="stat-label"><span data-lang="pt">softwares</span><span data-lang="en">software tools</span><span data-lang="es">softwares</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-grid">
+      <img src="images/img1.png" alt="Projeto biodigestor">
+      <img src="images/img2.png" alt="Sistema biogás">
+      <img src="images/img3.png" alt="Layout geral">
+    </div>
+    <div class="hero-badge">
+      <span data-lang="pt">disponível para projetos · 2025</span>
+      <span data-lang="en">available for projects · 2025</span>
+      <span data-lang="es">disponible · 2025</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <p class="section-label reveal">
+    <span data-lang="pt">01 — Perfil</span>
+    <span data-lang="en">01 — Profile</span>
+    <span data-lang="es">01 — Perfil</span>
+  </p>
+  <div class="about-grid">
+    <div>
+      <h2 class="about-title reveal">
+        <span data-lang="pt">Engenharia com propósito</span>
+        <span data-lang="en">Engineering with purpose</span>
+        <span data-lang="es">Ingeniería con propósito</span>
+      </h2>
+      <p class="about-text reveal">
+        <span data-lang="pt">Sou João Madeira, engenheiro civil e técnico em eletromecânica, baseado em Itajaí — SC. Minha atuação foca em sistemas de tratamento de efluentes, geração de biogás e infraestrutura industrial sustentável, unindo o rigor técnico da engenharia com soluções que fazem sentido para o ambiente e para o cliente.</span>
+        <span data-lang="en">I'm João Madeira, a civil engineer and electromechanical technician based in Itajaí — SC. My work focuses on effluent treatment systems, biogas generation and sustainable industrial infrastructure, combining engineering rigor with solutions that make sense for the environment and the client.</span>
+        <span data-lang="es">Soy João Madeira, ingeniero civil y técnico en electromecánica, con base en Itajaí — SC. Mi trabajo se centra en sistemas de tratamiento de efluentes, generación de biogás e infraestructura industrial sostenible, combinando el rigor técnico con soluciones que tienen sentido para el medio ambiente y el cliente.</span>
+      </p>
+      <p class="about-text reveal">
+        <span data-lang="pt">Domino ferramentas como Revit, AutoCAD e SketchUp para modelagem e detalhamento, e tenho experiência em configuração de redes e servidores, o que me permite entregar projetos completos com documentação técnica robusta.</span>
+        <span data-lang="en">I master tools like Revit, AutoCAD and SketchUp for modeling and detailing, and have experience in network and server configuration, allowing me to deliver complete projects with robust technical documentation.</span>
+        <span data-lang="es">Domino herramientas como Revit, AutoCAD y SketchUp para modelado y detallado, y tengo experiencia en configuración de redes y servidores, lo que me permite entregar proyectos completos con documentación técnica robusta.</span>
+      </p>
+
+      <div class="langs reveal">
+        <div class="lang-item">
+          <span class="lang-name">Português</span>
+          <span class="lang-level"><span data-lang="pt">Nativo</span><span data-lang="en">Native</span><span data-lang="es">Nativo</span></span>
+        </div>
+        <div class="lang-item">
+          <span class="lang-name">English</span>
+          <span class="lang-level"><span data-lang="pt">Fluente</span><span data-lang="en">Fluent</span><span data-lang="es">Fluido</span></span>
+        </div>
+        <div class="lang-item">
+          <span class="lang-name">Español</span>
+          <span class="lang-level"><span data-lang="pt">Fluente</span><span data-lang="en">Fluent</span><span data-lang="es">Fluido</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="skills-grid reveal">
+        <div class="skill-cell">
+          <span class="skill-name">Revit</span>
+          <span class="skill-type">BIM · Modelagem 3D</span>
+        </div>
+        <div class="skill-cell">
+          <span class="skill-name">AutoCAD</span>
+          <span class="skill-type"><span data-lang="pt">Projetos 2D/3D</span><span data-lang="en">2D/3D Projects</span><span data-lang="es">Proyectos 2D/3D</span></span>
+        </div>
+        <div class="skill-cell">
+          <span class="skill-name">SketchUp</span>
+          <span class="skill-type"><span data-lang="pt">Renderização · Layouts</span><span data-lang="en">Rendering · Layouts</span><span data-lang="es">Renderizado</span></span>
+        </div>
+        <div class="skill-cell">
+          <span class="skill-name"><span data-lang="pt">Redes / Servidores</span><span data-lang="en">Networks / Servers</span><span data-lang="es">Redes / Servidores</span></span>
+          <span class="skill-type">IT Infrastructure</span>
+        </div>
+        <div class="skill-cell">
+          <span class="skill-name"><span data-lang="pt">Tratamento de Água</span><span data-lang="en">Water Treatment</span><span data-lang="es">Tratamiento de Agua</span></span>
+          <span class="skill-type">ETE · ETA · Decantadores</span>
+        </div>
+        <div class="skill-cell">
+          <span class="skill-name">Biogás / Biometano</span>
+          <span class="skill-type">Biodigestores</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <p class="section-label reveal">
+    <span data-lang="pt">02 — Projetos</span>
+    <span data-lang="en">02 — Projects</span>
+    <span data-lang="es">02 — Proyectos</span>
+  </p>
+  <div class="projects-grid reveal">
+
+    <div class="project-card featured">
+      <div class="project-info">
+        <div class="project-num">01</div>
+        <h3 class="project-title">
+          <span data-lang="pt">Sistema de Biogás</span>
+          <span data-lang="en">Biogas System — Constanaro H2A</span>
+          <span data-lang="es">Sistema de Biogás</span>
+        </h3>
+        <p class="project-desc">
+          <span data-lang="pt">Projeto completo de sistema de captura, tratamento e aproveitamento de biogás. Inclui biodigestores, skid de compressão, sistema de purificação e layout geral de implantação.</span>
+          <span data-lang="en">Complete biogas capture, treatment and utilization system. Includes biodigesters, compression skid, purification system and general implementation layout.</span>
+          <span data-lang="es">Sistema completo de captura, tratamiento y aprovechamiento de biogás. Incluye biodigestores, skid de compresión, sistema de purificación y layout general de implantación.</span>
+        </p>
+        <div class="project-tags">
+          <span>Biogás</span><span>SketchUp</span><span>AutoCAD</span><span>Layout</span>
+        </div>
+      </div>
+      <div class="project-visual">
+        <img src="images/img1.png" alt="Constanaro H2A">
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <h3 class="project-title">
+        <span data-lang="pt">Planta de purificação de biogás</span>
+        <span data-lang="en">Planta de purificação de biogás</span>
+        <span data-lang="es">Planta de purificação de biogás</span>
+      </h3>
+      <p class="project-desc">
+        <span data-lang="pt">Leiaute geral de planta de biometano com skids CH4 e CO2, sistema de compressão e carregamento de módulos de transporte.</span>
+        <span data-lang="en">General layout of biomethane plant with CH4 and CO2 skids, compression system and transport module loading.</span>
+        <span data-lang="es">Layout general de planta de biometano con skids CH4 y CO2, sistema de compresión y carga de módulos de transporte.</span>
+      </p>
+      <div class="project-tags">
+        <span>Biometano</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">03</div>
+      <h3 class="project-title">
+        <span data-lang="pt">Biodigestor — Tuberias de Entrada/Saída</span>
+        <span data-lang="en">Biodigester — Inlet/Outlet Piping</span>
+        <span data-lang="es">Biodigestor — Tuberías de Entrada/Salida</span>
+      </h3>
+      <p class="project-desc">
+        <span data-lang="pt">Detalhamento técnico de tuberías de entrada e saída de biodigestor com gerador de oxigênio, caixas de saída e sistema de distribuição interna.</span>
+        <span data-lang="en">Technical detailing of biodigester inlet/outlet piping with oxygen generator, outlet boxes and internal distribution system.</span>
+        <span data-lang="es">Detalle técnico de tuberías de entrada y salida de biodigestor con generador de oxígeno, cajas de salida y sistema de distribución interna.</span>
+      </p>
+      <div class="project-tags">
+        <span>AutoCAD</span><span>Detalhamento</span><span>ETE</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">04</div>
+      <h3 class="project-title">
+        <span data-lang="pt">Plantas de Tratamento de Água</span>
+        <span data-lang="en">Water Treatment Plants</span>
+        <span data-lang="es">Plantas de Tratamiento de Agua</span>
+      </h3>
+      <p class="project-desc">
+        <span data-lang="pt">Projetos de ETA/ETE com decantadores laminares, sistemas de flotação, filtração e dosagem de produtos químicos para diferentes capacidades industriais.</span>
+        <span data-lang="en">WTP/WWTP projects with laminar settlers, flotation systems, filtration and chemical dosing for different industrial capacities.</span>
+        <span data-lang="es">Proyectos de PTAP/PTAR con decantadores laminares, sistemas de flotación, filtración y dosificación de químicos para diferentes capacidades industriales.</span>
+      </p>
+      <div class="project-tags">
+        <span>ETA</span><span>ETE</span><span>Decantadores</span><span>Revit</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">05</div>
+      <h3 class="project-title">
+        <span data-lang="pt">Infraestrutura de Redes</span>
+        <span data-lang="en">Network Infrastructure</span>
+        <span data-lang="es">Infraestructura de Redes</span>
+      </h3>
+      <p class="project-desc">
+        <span data-lang="pt">Configuração e implantação de sistemas de rede para servidores industriais, incluindo cabeamento estruturado, switching e gestão de tráfego.</span>
+        <span data-lang="en">Configuration and deployment of network systems for industrial servers, including structured cabling, switching and traffic management.</span>
+        <span data-lang="es">Configuración e implantación de sistemas de red para servidores industriales, incluyendo cableado estructurado, switching y gestión de tráfico.</span>
+      </p>
+      <div class="project-tags">
+        <span>Redes</span><span>Servidores</span><span>IT</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <p class="section-label reveal">
+    <span data-lang="pt">03 — Serviços</span>
+    <span data-lang="en">03 — Services</span>
+    <span data-lang="es">03 — Servicios</span>
+  </p>
+  <div class="services-list reveal">
+    <div class="service-item">
+      <div class="service-left">
+        <span class="service-idx">01</span>
+        <span class="service-name">
+          <span data-lang="pt">Biodigestores & Biogás</span>
+          <span data-lang="en">Biodigesters & Biogas</span>
+          <span data-lang="es">Biodigestores & Biogás</span>
+        </span>
+      </div>
+      <div class="service-tags">
+        <span>Design</span><span>Implantação</span><span>Skids</span>
+      </div>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-item">
+      <div class="service-left">
+        <span class="service-idx">02</span>
+        <span class="service-name">
+          <span data-lang="pt">Tratamento de Água & Efluentes</span>
+          <span data-lang="en">Water & Wastewater Treatment</span>
+          <span data-lang="es">Tratamiento de Agua y Efluentes</span>
+        </span>
+      </div>
+      <div class="service-tags">
+        <span>ETA</span><span>ETE</span><span>Decantadores</span>
+      </div>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-item">
+      <div class="service-left">
+        <span class="service-idx">03</span>
+        <span class="service-name">
+          <span data-lang="pt">Modelagem BIM / 3D</span>
+          <span data-lang="en">BIM / 3D Modeling</span>
+          <span data-lang="es">Modelado BIM / 3D</span>
+        </span>
+      </div>
+      <div class="service-tags">
+        <span>Revit</span><span>AutoCAD</span><span>SketchUp</span>
+      </div>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-item">
+      <div class="service-left">
+        <span class="service-idx">04</span>
+        <span class="service-name">
+          <span data-lang="pt">Infraestrutura Eletromecânica</span>
+          <span data-lang="en">Electromechanical Infrastructure</span>
+          <span data-lang="es">Infraestructura Electromecánica</span>
+        </span>
+      </div>
+      <div class="service-tags">
+        <span>Industrial</span><span>Elétrica</span><span>Mecânica</span>
+      </div>
+      <span class="service-arrow">→</span>
+    </div>
+    <div class="service-item">
+      <div class="service-left">
+        <span class="service-idx">05</span>
+        <span class="service-name">
+          <span data-lang="pt">Redes & Servidores</span>
+          <span data-lang="en">Networks & Servers</span>
+          <span data-lang="es">Redes & Servidores</span>
+        </span>
+      </div>
+      <div class="service-tags">
+        <span>IT</span><span>Infraestrutura</span>
+      </div>
+      <span class="service-arrow">→</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <p class="section-label reveal">
+    <span data-lang="pt">04 — Contato</span>
+    <span data-lang="en">04 — Contact</span>
+    <span data-lang="es">04 — Contacto</span>
+  </p>
+  <div class="contact-grid">
+    <div>
+      <h2 class="contact-title reveal">
+        <span data-lang="pt">Vamos trabalhar juntos</span>
+        <span data-lang="en">Let's work together</span>
+        <span data-lang="es">Trabajemos juntos</span>
+      </h2>
+      <p class="contact-sub reveal">
+        <span data-lang="pt">Aberto a projetos de engenharia, consultoria técnica e parcerias em desenvolvimento de sistemas ambientais e industriais.</span>
+        <span data-lang="en">Open to engineering projects, technical consulting and partnerships in environmental and industrial systems development.</span>
+        <span data-lang="es">Abierto a proyectos de ingeniería, consultoría técnica y alianzas en desarrollo de sistemas ambientales e industriales.</span>
+      </p>
+    </div>
+    <div class="contact-links reveal">
+      <a href="mailto:jvmcasas@pm.me" class="contact-link">
+        <span class="contact-link-label">Email</span>
+        <span class="contact-link-value">jvmcasas@pm.me</span>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="https://github.com/joaomadeira" target="_blank" class="contact-link">
+        <span class="contact-link-label">GitHub</span>
+        <span class="contact-link-value">github.com/joaomadeira</span>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="https://linkedin.com/in/joaomadeira" target="_blank" class="contact-link">
+        <span class="contact-link-label">LinkedIn</span>
+        <span class="contact-link-value">João Madeira</span>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="https://wa.me/5547999999999" target="_blank" class="contact-link">
+        <span class="contact-link-label">WhatsApp</span>
+        <span class="contact-link-value">47 99755-1658</span>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span><strong>João Madeira</strong> — Engenheiro Civil · Itajaí, SC</span>
+  <span>© 2025 · PT · EN · ES</span>
+</footer>
+
+<script>
+  // LANGUAGE
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.toLowerCase() === lang);
+    });
+  }
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
